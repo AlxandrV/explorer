@@ -10,15 +10,22 @@ if(!isset($_POST['cwd'])){
 else{
     $url = $_POST['cwd'];
 }
+// redirection vers le répertoire $url
 chdir($url);
+// liste les dossier et fichier du répertoire courant
 $content = scandir($url);
 
+// variable qui contiendra la fil d'arianne
 $path = "";
 $breadcrumb = explode(DIRECTORY_SEPARATOR, $url);
+// formulaire et boucle pour le breadcrumbs
 echo '<form method="POST" id="ch_cwd">';
 foreach($breadcrumb as $item){
     $path .= $item.DIRECTORY_SEPARATOR;
-    echo '<button type="submit" value="' . substr($path, 0, -1) . '" name="cwd">' . $item . '</button>';
+    if(strstr($path, $home)){
+        echo '<button type="submit" value="' . substr($path, 0, -1) . '" name="cwd">' . $item . '</button>';
+    }
+    //print_r($path);
 }
 echo '</form>';
 $contents = [];
