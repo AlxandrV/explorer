@@ -28,11 +28,16 @@ foreach($breadcrumb as $item){
     //print_r($path);
 }
 echo '</form>';
+
 $contents = [];
+// boucle listant élément de $content
 foreach($content as $item) {
     if($item !== "." && $item !== ".."){
         echo '<br><button type="submit" form="ch_cwd" value="' . $url . DIRECTORY_SEPARATOR . $item . '" name="cwd">' . $item . '</button>';
-        //$contents[$item] = $item;
+        $contents[$item] = $item;
     }
 }
+echo '<br/>';
+var_dump($contents);
+echo '<br/>';
 echo getcwd();
