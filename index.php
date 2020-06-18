@@ -37,7 +37,18 @@ foreach($content as $item) {
         $contents[$item] = $item;
     }
 }
-echo '<br/>';
+/*echo '<br/>';
 var_dump($contents);
 echo '<br/>';
-echo getcwd();
+echo getcwd();*/
+$new_files = '';
+$files = fopen('texte.txt', 'r+');
+if(isset($_POST['write_files'])){
+    $new_files = $_POST['write_files'];
+    fwrite($files, $new_files);
+}
+echo '<form method="post">';
+echo '<br/><textarea name="write_files">' . fread($files, filesize('texte.txt')) . '</textarea>';
+echo '<input type="submit">';
+echo '</form>';
+
