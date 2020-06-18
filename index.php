@@ -10,10 +10,7 @@ if(!isset($_POST['cwd'])){
 else{
     $url = $_POST['cwd'];
 }
-// redirection vers le répertoire $url
-chdir($url);
-// liste les dossier et fichier du répertoire courant
-$content = scandir($url);
+
 
 // variable qui contiendra la fil d'arianne
 $path = "";
@@ -29,26 +26,35 @@ foreach($breadcrumb as $item){
 }
 echo '</form>';
 
-$contents = [];
-// boucle listant élément de $content
-foreach($content as $item) {
-    if($item !== "." && $item !== ".."){
-        echo '<br><button type="submit" form="ch_cwd" value="' . $url . DIRECTORY_SEPARATOR . $item . '" name="cwd">' . $item . '</button>';
-        $contents[$item] = $item;
+// Si $url ne se termine pas par un répertoire
+if(!strstr($url, '.')){
+    // redirection vers le répertoire $url
+    chdir($url);
+    // liste les dossier et fichier du répertoire courant
+    $content = scandir($url);
+    
+    $contents = [];
+    // boucle listant élément de $content
+    foreach($content as $item) {
+        if($item !== "." && $item !== ".."){
+            echo '<br><button type="submit" form="ch_cwd" value="' . $url . DIRECTORY_SEPARATOR . $item . '" name="cwd">' . $item . '</button>';
+            $contents[$item] = $item;
+        }
     }
 }
 /*echo '<br/>';
 var_dump($contents);
-echo '<br/>';
-echo getcwd();*/
+echo '<br/>';*/
+echo getcwd();
+
+/*$files = fopen('texte.txt', 'r+');
 $new_files = '';
-$files = fopen('texte.txt', 'r+');
 if(isset($_POST['write_files'])){
     $new_files = $_POST['write_files'];
     fwrite($files, $new_files);
 }
 echo '<form method="post">';
 echo '<br/><textarea name="write_files">' . fread($files, filesize('texte.txt')) . '</textarea>';
-echo '<input type="submit">';
-echo '</form>';
+echo '<input type="submit" value="modifier">';
+echo '</form>';*/
 
