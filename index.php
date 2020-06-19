@@ -11,7 +11,7 @@ else{
     $url = $_POST['cwd'];
 }
 
-
+chdir($url);
 // variable qui contiendra la fil d'arianne
 $path = "";
 $breadcrumb = explode(DIRECTORY_SEPARATOR, $url);
@@ -26,35 +26,44 @@ foreach($breadcrumb as $item){
 }
 echo '</form>';
 
-// Si $url ne se termine pas par un répertoire
-if(!strstr($url, '.')){
-    // redirection vers le répertoire $url
-    chdir($url);
-    // liste les dossier et fichier du répertoire courant
-    $content = scandir($url);
-    
-    $contents = [];
-    // boucle listant élément de $content
-    foreach($content as $item) {
-        if($item !== "." && $item !== ".."){
-            echo '<br><button type="submit" form="ch_cwd" value="' . $url . DIRECTORY_SEPARATOR . $item . '" name="cwd">' . $item . '</button>';
-            $contents[$item] = $item;
+// liste les dossier et fichier du répertoire courant
+$content = scandir($url);
+
+$contents = [];
+$contents_size = [];
+$contents_date = [];
+$contents_type = [];
+foreach ($content as $item) {
+    if ($item !== "." && $item !== "..") {
+        // récupère la date de dernère modif de $item et la stock
+        $contents_date[$item] = filemtime($item);
+        // si $item est un dossier on le nomme "dossier"
+        if(is_dir($item)){
+            $contents_type[$item] = "dossier";
+            $contents_size[$item] = "";
         }
+        // sinon nommer "fichier"
+        else{
+            $contents_type[$item] = "fichier";
+            $contents_size[$item] = filesize($item);
+        }
+        // stock $item dans $contents[]
+        $contents[$item] = $item;
+        echo "<br><button type='submit' form='ch_cwd' value='" . $url . DIRECTORY_SEPARATOR . $item . "' name='cwd'>" . $item . " " . $contents_size[$item] . " " . $contents_type[$item] . "</button>";
     }
 }
 /*echo '<br/>';
-var_dump($contents);
-echo '<br/>';*/
-echo getcwd();
+echo '<br/>';
 
-/*$files = fopen('texte.txt', 'r+');
-$new_files = '';
+$files = fopen('texte.txt', 'r+');
+$new_files = fread($files, filesize('texte.txt'));
 if(isset($_POST['write_files'])){
-    $new_files = $_POST['write_files'];
+    $new_files = $_POST['write_files' . '\r\n'];
     fwrite($files, $new_files);
 }
 echo '<form method="post">';
-echo '<br/><textarea name="write_files">' . fread($files, filesize('texte.txt')) . '</textarea>';
+echo '<br/><textarea name="write_files"></textarea>';
 echo '<input type="submit" value="modifier">';
-echo '</form>';*/
+echo '</form>';
 
+echo '<br/>' . getcwd();*/
